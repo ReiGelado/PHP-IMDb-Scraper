@@ -39,14 +39,14 @@ class Imdb
 		$arr = array();
 		$html = $this->geturl("${imdbUrl}combined");
 		$title_id = $this->match('/<link rel="canonical" href="http:\/\/www.imdb.com\/title\/(tt\d+)\/combined" \/>/ms', $html, 1);
-		if(empty($title_id) || !preg_match("/tt\d+/i", $title_id)) {
-			$arr['error'] = "No Title found on IMDb!";
-			return $arr;
-		}
+		//if(empty($title_id) || !preg_match("/tt\d+/i", $title_id)) {
+		//	$arr['error'] = "No Title found on IMDb!";
+		//	return $arr;
+		//}
 		$arr['title_id'] = $title_id;
 		$arr['imdb_url'] = $imdbUrl;
 		$arr['title'] = str_replace('"', '', trim($this->match('/<title>(IMDb \- )*(.*?) \(.*?<\/title>/ms', $html, 2)));
-		$arr['original_title'] = trim($this->match('/class="title-extra">(.*?)</ms', $html, 1));
+		$arr['original_title'] = trim($this->match('/class="originalTitle">(.*?)</', $html, 1));
 		$arr['year'] = trim($this->match('/<title>.*?\(.*?(\d{4}).*?\).*?<\/title>/ms', $html, 1));
 		$arr['rating'] = $this->match('/<b>(\d.\d)\/10<\/b>/ms', $html, 1);
 		$arr['genres'] = $this->match_all('/<a.*?>(.*?)<\/a>/ms', $this->match('/Genre.?:(.*?)(<\/div>|See more)/ms', $html, 1), 1);
